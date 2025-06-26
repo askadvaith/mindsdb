@@ -30,6 +30,7 @@ MindsDB.egg-info/*
 /build
 train_finetune.lock
 parser_tests
+test.py
 
 # Autokeras generated files
 auto_model
