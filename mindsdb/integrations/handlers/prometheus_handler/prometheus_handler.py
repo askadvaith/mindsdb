@@ -123,13 +123,25 @@ class PrometheusHandler(DatabaseHandler):
         Returns:
             StatusResponse: An object containing the success status and an error message if an error occurs.
         """
-        response = StatusResponse(False)
-        connection = self.connect()
-        ok = connection.check_prometheus_connection()
-        response.success = ok
+        # response = StatusResponse(False)
+        # connection = self.connect()
+        # ok = connection.check_prometheus_connection()
+        # response.success = ok
 
-        if not ok:
-            logger.error("Error connecting to Prometheus!")
+        # if not ok:
+        #     logger.error("Error connecting to Prometheus!")
+
+        # return response
+        response = StatusResponse(False)
+
+        try:
+            connection = self.connect()
+            # Run a known harmless query instead of check_prometheus_connection()
+            result = connection.custom_query("prometheus_http_requests_total")
+            response.success = isinstance(result, list)
+        except Exception as e:
+            logger.error(f"Error connecting to Prometheus: {e}")
+            response.success = False
 
         return response
 
